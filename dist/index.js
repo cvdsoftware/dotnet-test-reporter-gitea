@@ -292,7 +292,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                     'Authorization': `token ${token}`,
                     'accept': 'application/json'
                 },
-                body: JSON.stringify({ body: comment }),
+                body: JSON.stringify({ body: comment + '<br><br>' + summary }),
             });
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`);
