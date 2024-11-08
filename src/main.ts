@@ -34,7 +34,6 @@ const run = async (): Promise<void> => {
 
     if (process.env['GITEA_ACTIONS']) {
         console.log('This is a Gitea Action');
-        console.log('token: ' + token)
 
         // test, for now
         let url = process.env['GITHUB_API_URL'] + "/repos/" + process.env['GITHUB_REPOSITORY'] + '/issues/43/comments';
@@ -46,7 +45,7 @@ const run = async (): Promise<void> => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token,
+                'Authorization': `token ${token}`,
                 'accept': 'application/json'
             },
             body: JSON.stringify({ body: comment }),
