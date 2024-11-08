@@ -42,6 +42,7 @@ const run = async (): Promise<void> => {
             let existingCommentId = null;
 
             // Get existing comments to see if we need to update it
+
             await fetch(url, {
                 method: 'GET',
                 headers: {
