@@ -282,6 +282,20 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         if (process.env['GITEA_ACTIONS']) {
             console.log('This is a Gitea Action');
             console.log('token: ' + token);
+            // test, for now
+            let url = process.env['GITHUB_API_URL'] + "/repos/" + process.env['GITHUB_REPOSITORY'] + '/issues/43/comments';
+            const response = yield fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token,
+                    'accept': 'application/json'
+                },
+                body: JSON.stringify({ body: comment }),
+            });
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
         }
         else {
             yield (0, utils_1.setSummary)(summary);
