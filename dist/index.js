@@ -267,6 +267,7 @@ const utils_1 = __nccwpck_require__(7782);
 const markdown_1 = __nccwpck_require__(2519);
 const html_1 = __nccwpck_require__(9339);
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const { token, title, resultsPath, coveragePath, coverageType, coverageThreshold, postNewComment, allowFailedTests, showFailedTestsOnly, showTestOutput } = (0, utils_1.getInputs)();
         let comment = '';
@@ -281,21 +282,27 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (process.env['GITEA_ACTIONS']) {
             console.log('This is a Gitea Action');
-            // test, for now
-            let url = `${process.env['GITHUB_API_URL']}/repos/${process.env['GITHUB_REPOSITORY']}/issues/43/comments`;
-            console.log('url: ' + url);
-            console.log('comment: ' + comment);
-            const response = yield fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `token ${token}`,
-                    'accept': 'application/json'
-                },
-                body: JSON.stringify({ body: `${comment}\r\n<details><summary>Details:</summary>\r\n${summary}\r\n</details>` }),
-            });
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
+            if ((_a = process.env['GITHUB_EVENT_NAME']) === null || _a === void 0 ? void 0 : _a.startsWith('pull_')) {
+                let url = `${process.env['GITHUB_API_URL']}/repos/${process.env['GITHUB_REPOSITORY']}/issues/${process.env['GITHUB_REF_NAME']}/comments`;
+                // Gitea doesn't support Summarys yet, so combine the comment and summary, see https://github.com/go-gitea/gitea/issues/23721
+                const combinedComment = `${comment}\r\n<details><summary>Details</summary>\r\n${summary}\r\n</details>`;
+                const response = yield fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `token ${token}`,
+                        'accept': 'application/json'
+                    },
+                    body: JSON.stringify({ body: combinedComment }),
+                });
+                if (!response.ok) {
+                    response.text().then((text) => {
+                        throw new Error(`Error calling Grita API: Response status: ${response.status}, Response Text: ${text}`);
+                    });
+                }
+            }
+            else {
+                console.log('This isn\'t a pull request');
             }
         }
         else {
