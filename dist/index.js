@@ -281,6 +281,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (process.env['GITEA_ACTIONS']) {
             console.log('This is a Gitea Action');
+            console.log('token: ' + token);
         }
         else {
             yield (0, utils_1.setSummary)(summary);
