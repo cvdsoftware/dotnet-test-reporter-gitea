@@ -308,7 +308,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 if (existingCommentId != null) {
                     method = 'PATCH';
                     url += '/' + existingCommentId;
-                    combinedComment = `[comment]: # (dotnet-test-reporter-${process.env['GITHUB_REF_NAME']})\nUpdated  ${new Date().toLocaleString()}\n` + combinedComment;
+                    combinedComment = `[comment]: # (dotnet-test-reporter-${process.env['GITHUB_REF_NAME']})\nUpdated  ${new Date().toLocaleString()}\n` + combinedComment.replace(`[comment]: # (dotnet-test-reporter-${process.env['GITHUB_REF_NAME']})\n`, '');
                 }
                 const response = yield fetch(url, {
                     method: method,
