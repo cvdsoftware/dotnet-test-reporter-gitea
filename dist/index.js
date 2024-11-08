@@ -284,6 +284,17 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             console.log('This is a Gitea Action');
             if ((_a = process.env['GITHUB_EVENT_NAME']) === null || _a === void 0 ? void 0 : _a.startsWith('pull_')) {
                 let url = `${process.env['GITHUB_API_URL']}/repos/${process.env['GITHUB_REPOSITORY']}/issues/${process.env['GITHUB_REF_NAME']}/comments`;
+                // Get existing comments to see if we need to update it
+                yield fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `token ${token}`,
+                        'accept': 'application/json'
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => console.log(data));
                 // Gitea doesn't support Summarys yet, so combine the comment and summary, see https://github.com/go-gitea/gitea/issues/23721
                 const combinedComment = `${comment}\r\n<details><summary>Details</summary>\r\n${summary}\r\n</details>`;
                 const response = yield fetch(url, {
