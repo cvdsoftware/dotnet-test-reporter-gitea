@@ -284,6 +284,8 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             console.log('token: ' + token);
             // test, for now
             let url = process.env['GITHUB_API_URL'] + "/repos/" + process.env['GITHUB_REPOSITORY'] + '/issues/43/comments';
+            console.log('url: ' + url);
+            console.log('comment: ' + comment);
             const response = yield fetch(url, {
                 method: 'POST',
                 headers: {
