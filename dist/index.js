@@ -279,8 +279,13 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             comment += testCoverage ? (0, markdown_1.formatCoverageMarkdown)(testCoverage, coverageThreshold) : '';
             summary += testCoverage ? (0, html_1.formatCoverageHtml)(testCoverage) : '';
         }
-        yield (0, utils_1.setSummary)(summary);
-        yield (0, utils_1.publishComment)(token, title, comment, postNewComment);
+        if (process.env['GITEA_ACTIONS']) {
+            console.log('This is a Gitea Action');
+        }
+        else {
+            yield (0, utils_1.setSummary)(summary);
+            yield (0, utils_1.publishComment)(token, title, comment, postNewComment);
+        }
     }
     catch (error) {
         (0, utils_1.setFailed)(error.message);

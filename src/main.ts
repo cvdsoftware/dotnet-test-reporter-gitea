@@ -32,8 +32,12 @@ const run = async (): Promise<void> => {
       summary += testCoverage ? formatCoverageHtml(testCoverage) : '';
     }
 
-    await setSummary(summary);
-    await publishComment(token, title, comment, postNewComment);
+    if (process.env['GITEA_ACTIONS']) {
+        console.log('This is a Gitea Action');
+    } else {
+        await setSummary(summary);
+        await publishComment(token, title, comment, postNewComment);
+    }
   } catch (error) {
     setFailed((error as Error).message);
   }
