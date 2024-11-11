@@ -950,12 +950,13 @@ const action_1 = __nccwpck_require__(2216);
 const publishCommentToGitea = (token, comment, summary, postNew) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     (0, action_1.log)('This is a Gitea Action');
+    (0, action_1.log)(comment);
     if (!((_a = process.env['GITHUB_EVENT_NAME']) === null || _a === void 0 ? void 0 : _a.startsWith('pull_'))) {
         (0, action_1.log)(`Expected a pull request event, not a ${process.env['GITHUB_EVENT_NAME']}.`);
-        (0, action_1.log)(comment);
         return;
     }
     const existingComment = !postNew ? yield getExistingComment(token) : null;
+    console.log('existingComment', existingComment);
     // Gitea doesn't support summaries yet, so combine the comment and summary, see https://github.com/go-gitea/gitea/issues/23721
     let combinedComment = `[comment]: # (dotnet-test-reporter-${process.env['GITHUB_REF_NAME']})\n${comment}\r\n<details><summary>Details</summary>\r\n${summary}\r\n</details>`;
     if (existingComment && !postNew) {
